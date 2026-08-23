@@ -18,6 +18,9 @@ return {
 			-- native vim.lsp.config/enable (0.11+) does the actual setup.
 			vim.lsp.config("gopls", {
 				capabilities = capabilities,
+				-- drop "gotmpl" from nvim-lspconfig's defaults: nvim has no
+				-- built-in detector for it, which trips a checkhealth warning
+				filetypes = { "go", "gomod", "gowork", "gosum" },
 				settings = {
 					gopls = {
 						gofumpt = true,
