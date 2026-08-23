@@ -40,7 +40,9 @@ mason.nvim will install `gopls` automatically.
 - Leader is `<Space>`
 - `<leader>ff` / `<leader>fg` / `<leader>fb` — find files / live grep / buffers (Telescope)
 - `gd` / `gr` / `K` — go to definition / references / hover (LSP)
-- `<leader>rn` / `<leader>ca` — rename / code action (LSP)
+- `<leader>rn` / `<leader>ca` — rename / code action (i.e. autofix a hint/warning/error, LSP)
+- `]d` / `[d` — jump to next / previous diagnostic (hint, warning, or error)
+- `gl` — show the diagnostic under the cursor in a float
 - `<leader>g` / `<leader>t` — go run current file / go test ./... (Go buffers only)
 - `<F5>` / `<F10>` / `<F11>` / `<F12>` — debug: continue / step over / step into / step out
 - `<leader>db` / `<leader>du` — toggle breakpoint / toggle debug UI
