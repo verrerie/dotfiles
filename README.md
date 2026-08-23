@@ -53,6 +53,13 @@ mason.nvim will install `gopls` automatically.
 - Debugging: `nvim-dap` + `nvim-dap-go`, backed by `delve` (also via mason.nvim)
 - Syntax: treesitter (`go`, `gomod`, `gowork`, `gosum`)
 
+## yazi
+
+`yazi/open.toml` makes `o`/`Enter` open text/code files (go, lua, toml, yaml,
+json, md, ...) in nvim instead of the OS default app. On Windows it always
+runs `nvim` directly; on macOS/Linux it runs `$EDITOR`, so set that in your
+shell rc (`export EDITOR=nvim`) for it to take effect there.
+
 ## Updating
 
 Pull on whichever machine, relaunch `nvim`, run `:Lazy sync` if plugin versions changed.
