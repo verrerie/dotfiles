@@ -55,7 +55,7 @@ mason.nvim will install `gopls` automatically.
 
 ## yazi
 
-`yazi/open.toml` makes `o`/`Enter` open text/code files (go, lua, toml, yaml,
+`yazi/yazi.toml` makes `o`/`Enter` open text/code files (go, lua, toml, yaml,
 json, md, ...) in nvim instead of the OS default app. On Windows it always
 runs `nvim` directly; on macOS/Linux it runs `$EDITOR`, so set that in your
 shell rc (`export EDITOR=nvim`) for it to take effect there.
