@@ -1,19 +1,19 @@
 [opener]
 edit = [
-	{ run = '$EDITOR "$@"', desc = "$EDITOR", block = true, for = "unix" },
-	{ run = 'nvim "$@"', desc = "nvim", block = true, for = "windows" },
+	{ run = '$EDITOR %s', desc = "$EDITOR", block = true, for = "unix" },
+	{ run = 'nvim %s', desc = "nvim", block = true, for = "windows" },
 ]
 
 [open]
 prepend_rules = [
 	{ mime = "text/*", use = "edit" },
-	{ name = "*.go", use = "edit" },
-	{ name = "*.mod", use = "edit" },
-	{ name = "*.sum", use = "edit" },
-	{ name = "*.lua", use = "edit" },
-	{ name = "*.toml", use = "edit" },
-	{ name = "*.yaml", use = "edit" },
-	{ name = "*.yml", use = "edit" },
-	{ name = "*.json", use = "edit" },
-	{ name = "*.md", use = "edit" },
+	{ url = "*.go", use = "edit" },
+	{ url = "*.mod", use = "edit" },
+	{ url = "*.sum", use = "edit" },
+	{ url = "*.lua", use = "edit" },
+	{ url = "*.toml", use = "edit" },
+	{ url = "*.yaml", use = "edit" },
+	{ url = "*.yml", use = "edit" },
+	{ url = "*.json", use = "edit" },
+	{ url = "*.md", use = "edit" },
 ]
