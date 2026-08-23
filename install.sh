@@ -1,16 +1,19 @@
 #!/usr/bin/env bash
-# Symlinks this repo's nvim config into place. Run on macOS/Linux.
+# Symlinks this repo's configs into place. Run on macOS/Linux.
 set -euo pipefail
 
 DOTFILES_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-TARGET="$HOME/.config/nvim"
+
+link_config() {
+	local name="$1" target="$2"
+	if [ -e "$target" ] || [ -L "$target" ]; then
+		echo "Backing up existing $target to $target.bak"
+		mv "$target" "$target.bak"
+	fi
+	ln -s "$DOTFILES_DIR/$name" "$target"
+	echo "Linked $target -> $DOTFILES_DIR/$name"
+}
 
 mkdir -p "$HOME/.config"
-
-if [ -e "$TARGET" ] || [ -L "$TARGET" ]; then
-	echo "Backing up existing $TARGET to $TARGET.bak"
-	mv "$TARGET" "$TARGET.bak"
-fi
-
-ln -s "$DOTFILES_DIR/nvim" "$TARGET"
-echo "Linked $TARGET -> $DOTFILES_DIR/nvim"
+link_config "nvim" "$HOME/.config/nvim"
+link_config "yazi" "$HOME/.config/yazi"
