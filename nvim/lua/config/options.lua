@@ -23,3 +23,11 @@ opt.undofile = true
 opt.expandtab = true
 opt.shiftwidth = 4
 opt.tabstop = 4
+
+-- use Git Bash for :terminal on Windows (macOS/Linux already default to a
+-- posix shell, so this is a no-op there)
+if vim.fn.has("win32") == 1 then
+	opt.shell = "C:\\Program Files\\Git\\bin\\bash.exe"
+	opt.shellcmdflag = "-c"
+	opt.shellxquote = ""
+end
