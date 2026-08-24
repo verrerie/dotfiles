@@ -1,0 +1,5 @@
+# yazi 25.x renamed the [manager] section to [mgr]
+[[mgr.prepend_keymap]]
+on   = "<Enter>"
+run  = "enter"
+desc = "Enter the child directory"
