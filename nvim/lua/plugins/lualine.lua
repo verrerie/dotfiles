@@ -3,7 +3,7 @@ return {
 		"nvim-lualine/lualine.nvim",
 		opts = {
 			options = {
-				theme = "tokyonight",
+				theme = "catppuccin",
 				component_separators = "|",
 				section_separators = "",
 			},

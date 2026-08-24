@@ -74,7 +74,7 @@ GUI-launched nvim still finds these binaries.
 ## Other plugins
 
 - `gitsigns.nvim` — hunk signs in the gutter, stage/reset/preview/blame
-- `lualine.nvim` — statusline (tokyonight theme, matches the colorscheme)
+- `lualine.nvim` — statusline (catppuccin theme, matches the colorscheme)
 
 ## yazi
 
