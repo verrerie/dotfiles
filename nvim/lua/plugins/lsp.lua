@@ -9,15 +9,17 @@ return {
 		config = function()
 			require("mason").setup()
 			require("mason-lspconfig").setup({
-				ensure_installed = { "gopls" },
+				-- metals is intentionally absent: it ships via coursier, not mason
+				ensure_installed = { "gopls", "ts_ls" },
 			})
 
-			local capabilities = require("cmp_nvim_lsp").default_capabilities()
+			vim.lsp.config("*", {
+				capabilities = require("cmp_nvim_lsp").default_capabilities(),
+			})
 
 			-- nvim-lspconfig just ships the default gopls config; nvim's
 			-- native vim.lsp.config/enable (0.11+) does the actual setup.
 			vim.lsp.config("gopls", {
-				capabilities = capabilities,
 				-- drop "gotmpl" from nvim-lspconfig's defaults: nvim has no
 				-- built-in detector for it, which trips a checkhealth warning
 				filetypes = { "go", "gomod", "gowork", "gosum" },
@@ -28,7 +30,22 @@ return {
 					},
 				},
 			})
-			vim.lsp.enable("gopls")
+			-- metals requires JDK 17 even when the default JDK is newer. Resolve it
+			-- from sdkman rather than pinning a patch version, and leave cmd_env
+			-- unset when there is no match so metals uses the ambient JAVA_HOME.
+			local metals_env = nil
+			local jdk17 = vim.fn.glob(vim.fn.expand("~/.sdkman/candidates/java/17.*"), false, true)
+			if #jdk17 > 0 then
+				table.sort(jdk17)
+				metals_env = { JAVA_HOME = jdk17[#jdk17] }
+			end
+
+			vim.lsp.config("metals", {
+				cmd = { "metals" },
+				cmd_env = metals_env,
+			})
+
+			vim.lsp.enable({ "gopls", "ts_ls", "metals" })
 
 			vim.api.nvim_create_autocmd("LspAttach", {
 				callback = function(args)

@@ -1,7 +1,8 @@
 # dotfiles
 
 Personal Neovim config, built around [lazy.nvim](https://github.com/folke/lazy.nvim), with Go
-development set up out of the box (`gopls` via mason.nvim, treesitter, completion, format-on-save).
+development set up out of the box (`gopls` via mason.nvim, treesitter, completion, format-on-save),
+plus TypeScript and Scala language servers.
 Shared between machines (Windows desktop + Mac mini) via this repo.
 
 ## Layout
@@ -47,7 +48,22 @@ mason.nvim will install `gopls` automatically.
 - `<F5>` / `<F10>` / `<F11>` / `<F12>` — debug: continue / step over / step into / step out
 - `<leader>db` / `<leader>du` — toggle breakpoint / toggle debug UI
 - `<leader>dt` — debug the nearest Go test
+- `]c` / `[c` — jump to next / previous git hunk (gitsigns)
+- `<leader>hs` / `<leader>hr` / `<leader>hp` / `<leader>hb` — stage / reset / preview hunk, blame line
 - Go files: imports are organized (goimports) and gofmt'd automatically on save.
+
+## Language servers
+
+| Language | Server | Installed via |
+|---|---|---|
+| Go | `gopls` | mason.nvim (automatic) |
+| TypeScript / JavaScript | `ts_ls` | mason.nvim (automatic) |
+| Scala | `metals` | coursier — `cs install metals` (**not** mason) |
+
+`metals` needs JDK 17 even when your default JDK is newer; the config picks the highest
+`~/.sdkman/candidates/java/17.*` it finds and falls back to the ambient `JAVA_HOME` if there
+is none. `~/go/bin` and the coursier bin dir are prepended to `PATH` on unix so a
+GUI-launched nvim still finds these binaries.
 
 ## Go development
 
@@ -55,12 +71,19 @@ mason.nvim will install `gopls` automatically.
 - Debugging: `nvim-dap` + `nvim-dap-go`, backed by `delve` (also via mason.nvim)
 - Syntax: treesitter (`go`, `gomod`, `gowork`, `gosum`)
 
+## Other plugins
+
+- `gitsigns.nvim` — hunk signs in the gutter, stage/reset/preview/blame
+- `lualine.nvim` — statusline (tokyonight theme, matches the colorscheme)
+
 ## yazi
 
 `yazi/yazi.toml` makes `o`/`Enter` open text/code files (go, lua, toml, yaml,
 json, md, ...) in nvim instead of the OS default app. On Windows it always
 runs `nvim` directly; on macOS/Linux it runs `$EDITOR`, so set that in your
 shell rc (`export EDITOR=nvim`) for it to take effect there.
+
+`yazi/keymap.toml` rebinds `<Enter>` to descend into the highlighted directory.
 
 ## Updating
 
