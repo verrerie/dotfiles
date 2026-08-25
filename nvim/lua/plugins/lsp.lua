@@ -62,13 +62,20 @@ return {
 			vim.api.nvim_create_autocmd("BufWritePre", {
 				pattern = "*.go",
 				callback = function()
-					local params = vim.lsp.util.make_range_params(0, "utf-8")
+					-- gopls reports utf-16; hardcoding utf-8 misplaces edits on any
+					-- line containing non-ASCII before the edit point.
+					local client = vim.lsp.get_clients({ bufnr = 0, name = "gopls" })[1]
+					if not client then
+						return
+					end
+					local enc = client.offset_encoding
+					local params = vim.lsp.util.make_range_params(0, enc)
 					params.context = { only = { "source.organizeImports" } }
 					local result = vim.lsp.buf_request_sync(0, "textDocument/codeAction", params, 1000)
 					for _, res in pairs(result or {}) do
 						for _, action in pairs(res.result or {}) do
 							if action.edit then
-								vim.lsp.util.apply_workspace_edit(action.edit, "utf-8")
+								vim.lsp.util.apply_workspace_edit(action.edit, enc)
 							end
 						end
 					end

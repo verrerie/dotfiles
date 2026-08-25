@@ -13,6 +13,8 @@ nvim/
   lua/config/     -- options, keymaps, lazy.nvim bootstrap
   lua/plugins/     -- one file per plugin/plugin-group
   ftplugin/go.lua  -- Go uses tabs, not spaces
+zsh/
+  zshenv           -- linked to ~/.zshenv (macOS/Linux only)
 ```
 
 ## Install
@@ -36,6 +38,11 @@ git clone https://github.com/<your-username>/dotfiles.git $HOME\dotfiles
 Then launch `nvim` — lazy.nvim will bootstrap itself and install all plugins on first run, and
 mason.nvim will install `gopls` automatically.
 
+`install.sh` also links `zsh/zshenv` to `~/.zshenv`, which restores the oh-my-zsh git aliases
+inside Neovim's `:!` (a non-interactive shell never reads `.zshrc`). `install.ps1` has no
+counterpart — that part is zsh only. Both scripts back up whatever they replace to `<name>.bak`,
+and skip anything already linked to this repo.
+
 ## Keymaps
 
 - Leader is `<Space>`
@@ -44,7 +51,8 @@ mason.nvim will install `gopls` automatically.
 - `<leader>rn` / `<leader>ca` — rename / code action (i.e. autofix a hint/warning/error, LSP)
 - `]d` / `[d` — jump to next / previous diagnostic (hint, warning, or error)
 - `gl` — show the diagnostic under the cursor in a float
-- `<leader>g` / `<leader>t` — go run current file / go test ./... (Go buffers only)
+- `<leader>g` / `<leader>t` / `<leader>T` — go run . / go test ./... / go test -v -race ./... (Go buffers only)
+- `<leader>b` — go build into the quickfix list, with jump-to-error (Go buffers only)
 - `<F5>` / `<F10>` / `<F11>` / `<F12>` — debug: continue / step over / step into / step out
 - `<leader>db` / `<leader>du` — toggle breakpoint / toggle debug UI
 - `<leader>dt` — debug the nearest Go test
