@@ -48,10 +48,34 @@ vim.diagnostic.config({
 	severity_sort = true,
 })
 
--- use Git Bash for :terminal on Windows (macOS/Linux already default to a
--- posix shell, so this is a no-op there)
+-- use Git Bash for :terminal and :! on Windows (macOS/Linux already default to
+-- a posix shell, so this whole block is skipped there)
+--
+-- Two things this has to get right:
+--
+--  1. Vim splits 'shell' on spaces to build the argv, so the bare path
+--     C:\Program Files\Git\bin\bash.exe is read as the program "C:\Program"
+--     with an argument "Files\Git\bin\bash.exe" -- hence "shell failed to
+--     start: no such file or directory: C:\Program". The value must be quoted.
+--
+--  2. Only set it if the binary is actually there. Pointing 'shell' at a
+--     missing path breaks *every* shell command in nvim with no fallback;
+--     leaving it unset just means cmd.exe, which works.
 if vim.fn.has("win32") == 1 then
-	opt.shell = "C:\\Program Files\\Git\\bin\\bash.exe"
-	opt.shellcmdflag = "-c"
-	opt.shellxquote = ""
+	local candidates = {
+		"C:\\Program Files\\Git\\bin\\bash.exe",
+		"C:\\Program Files (x86)\\Git\\bin\\bash.exe",
+		vim.fn.expand("$LOCALAPPDATA\\Programs\\Git\\bin\\bash.exe"),
+	}
+	-- deliberately not vim.fn.exepath("bash"): on Windows that usually resolves
+	-- to C:\Windows\System32\bash.exe, which launches WSL, not Git Bash.
+	for _, path in ipairs(candidates) do
+		if vim.fn.executable(path) == 1 then
+			vim.o.shell = '"' .. path .. '"'
+			vim.o.shellcmdflag = "-c"
+			vim.o.shellxquote = ""
+			vim.o.shellquote = ""
+			break
+		end
+	end
 end
