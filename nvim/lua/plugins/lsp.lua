@@ -17,11 +17,15 @@ return {
 				capabilities = require("cmp_nvim_lsp").default_capabilities(),
 			})
 
-			-- On Windows, Device Guard refuses to execute mason's gopls.exe --
-			-- it is downloaded, so it carries the mark-of-the-web that the policy
-			-- blocks ("gopls quit with exit code 4551"). A gopls built locally by
-			-- `go install golang.org/x/tools/gopls@latest` is allowed, so prefer
-			-- that one. Everywhere else, leave cmd alone and let mason's copy win.
+			-- On Windows, Device Guard refuses to execute mason's gopls.exe and
+			-- nvim reports only "gopls quit with exit code 4551"; the real message
+			-- is in lsp.log, or from running the binary by hand.
+			--
+			-- Mason installs gopls with `go install`, so its copy and the one in
+			-- ~/go/bin are both locally built -- same provenance, same toolchain.
+			-- Only the mason one is blocked, so the policy is keyed on *location*:
+			-- %LOCALAPPDATA% is a commonly denied execution path. Hence prefer
+			-- ~/go/bin. Everywhere else, leave cmd alone and let mason's copy win.
 			local gopls_cmd = nil
 			if vim.fn.has("win32") == 1 then
 				local built = vim.fn.expand("~/go/bin/gopls.exe")

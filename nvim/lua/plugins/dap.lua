@@ -12,10 +12,10 @@ return {
 				ensure_installed = { "delve" },
 				automatic_installation = true,
 			})
-			-- Same Device Guard problem as gopls: mason's downloaded dlv.exe is
+			-- Same Device Guard problem as gopls: dlv.exe under %LOCALAPPDATA% is
 			-- blocked on Windows, and mason prepends its own bin to PATH, so a
-			-- bare "dlv" would resolve to the blocked copy. Point at the
-			-- `go install`-built one when it is there.
+			-- bare "dlv" would resolve to the blocked copy. Point at the one in
+			-- ~/go/bin when it is there.
 			local dap_go_opts = {}
 			if vim.fn.has("win32") == 1 then
 				local built = vim.fn.expand("~/go/bin/dlv.exe")
