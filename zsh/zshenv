@@ -1,0 +1,24 @@
+# Sourced by EVERY zsh — interactive or not, login or not — before .zprofile
+# and .zshrc. Keep it cheap and free of output.
+
+[ -r "$HOME/.cargo/env" ] && . "$HOME/.cargo/env"
+
+# Neovim's :! spawns a non-interactive zsh, which never reads .zshrc, so
+# oh-my-zsh never loads and none of its aliases exist. Pull in the ones worth
+# having.
+#
+# Two guards. $VIM is exported by nvim to its children, so this stays out of
+# ordinary scripts and out of shells you open yourself. The interactive test
+# leaves :term alone: a :term shell reads .zshrc normally and would otherwise
+# source the plugin twice.
+#
+# Note the usual advice for this problem — `set shellcmdflag=-ic` in nvim — is
+# a trap here. Interactive zsh starts powerlevel10k, whose gitstatus daemon
+# cannot initialize without a tty, so it prepends a multi-line error and raw
+# ANSI escapes to the output of every :! and every :make.
+if [[ -n $VIM ]] && [[ ! -o interactive ]] && [[ -r "$HOME/.oh-my-zsh/plugins/git/git.plugin.zsh" ]]; then
+	compdef() {} # the plugin calls compdef, which only exists after compinit
+	source "$HOME/.oh-my-zsh/plugins/git/git.plugin.zsh"
+	unfunction compdef
+	alias vim='nvim' vi='nvim'
+fi

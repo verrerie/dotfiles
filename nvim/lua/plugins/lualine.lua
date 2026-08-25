@@ -3,7 +3,10 @@ return {
 		"nvim-lualine/lualine.nvim",
 		opts = {
 			options = {
-				theme = "catppuccin",
+				-- catppuccin ships per-flavour lualine themes (catppuccin-mocha etc),
+				-- not a plain "catppuccin" -- asking for that warns on every startup.
+				-- "auto" derives the palette from the active colorscheme.
+				theme = "auto",
 				component_separators = "|",
 				section_separators = "",
 			},
