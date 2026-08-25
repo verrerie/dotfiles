@@ -17,9 +17,23 @@ return {
 				capabilities = require("cmp_nvim_lsp").default_capabilities(),
 			})
 
+			-- On Windows, Device Guard refuses to execute mason's gopls.exe --
+			-- it is downloaded, so it carries the mark-of-the-web that the policy
+			-- blocks ("gopls quit with exit code 4551"). A gopls built locally by
+			-- `go install golang.org/x/tools/gopls@latest` is allowed, so prefer
+			-- that one. Everywhere else, leave cmd alone and let mason's copy win.
+			local gopls_cmd = nil
+			if vim.fn.has("win32") == 1 then
+				local built = vim.fn.expand("~/go/bin/gopls.exe")
+				if vim.fn.executable(built) == 1 then
+					gopls_cmd = { built }
+				end
+			end
+
 			-- nvim-lspconfig just ships the default gopls config; nvim's
 			-- native vim.lsp.config/enable (0.11+) does the actual setup.
 			vim.lsp.config("gopls", {
+				cmd = gopls_cmd,
 				-- drop "gotmpl" from nvim-lspconfig's defaults: nvim has no
 				-- built-in detector for it, which trips a checkhealth warning
 				filetypes = { "go", "gomod", "gowork", "gosum" },

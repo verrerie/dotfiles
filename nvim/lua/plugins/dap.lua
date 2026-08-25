@@ -12,7 +12,18 @@ return {
 				ensure_installed = { "delve" },
 				automatic_installation = true,
 			})
-			require("dap-go").setup()
+			-- Same Device Guard problem as gopls: mason's downloaded dlv.exe is
+			-- blocked on Windows, and mason prepends its own bin to PATH, so a
+			-- bare "dlv" would resolve to the blocked copy. Point at the
+			-- `go install`-built one when it is there.
+			local dap_go_opts = {}
+			if vim.fn.has("win32") == 1 then
+				local built = vim.fn.expand("~/go/bin/dlv.exe")
+				if vim.fn.executable(built) == 1 then
+					dap_go_opts.delve = { path = built }
+				end
+			end
+			require("dap-go").setup(dap_go_opts)
 
 			local dap = require("dap")
 			local dapui = require("dapui")
