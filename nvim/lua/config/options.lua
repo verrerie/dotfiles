@@ -25,15 +25,24 @@ opt.shiftwidth = 4
 opt.tabstop = 4
 
 -- LSP servers installed outside mason (metals via coursier, Go tools via
--- `go install`) live in dirs a GUI-launched nvim doesn't inherit on PATH
-if vim.fn.has("mac") == 1 or vim.fn.has("unix") == 1 then
-	local extra_path = {
-		vim.fn.expand("~/go/bin"),
-		vim.fn.expand("~/Library/Application Support/Coursier/bin"),
-	}
+-- `go install`) live in dirs a GUI-launched nvim doesn't inherit on PATH.
+-- Windows needs this too: Device Guard blocks mason's downloaded binaries
+-- there, so `go install`-built tools in ~/go/bin are the working ones.
+do
+	local extra_path, sep
+	if vim.fn.has("win32") == 1 then
+		extra_path = { vim.fn.expand("~/go/bin") }
+		sep = ";"
+	else
+		extra_path = {
+			vim.fn.expand("~/go/bin"),
+			vim.fn.expand("~/Library/Application Support/Coursier/bin"),
+		}
+		sep = ":"
+	end
 	for _, dir in ipairs(extra_path) do
 		if vim.fn.isdirectory(dir) == 1 then
-			vim.env.PATH = dir .. ":" .. vim.env.PATH
+			vim.env.PATH = dir .. sep .. vim.env.PATH
 		end
 	end
 end
