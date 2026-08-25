@@ -2,10 +2,13 @@ vim.opt_local.expandtab = false
 vim.opt_local.tabstop = 4
 vim.opt_local.shiftwidth = 4
 
--- `go build` errors into the quickfix list with jump-to-line. `-o /dev/null`
--- so <leader>b doesn't drop a binary in the cwd every time.
+-- `go build` errors into the quickfix list with jump-to-line. Discard the
+-- binary so <leader>b doesn't drop one in the cwd every time -- go only
+-- recognises the platform's own null device (os.DevNull), so "/dev/null" on
+-- Windows is read as a real path and the build fails.
 vim.cmd("compiler go")
-vim.bo.makeprg = "go build -o /dev/null ./..."
+local devnull = vim.fn.has("win32") == 1 and "NUL" or "/dev/null"
+vim.bo.makeprg = "go build -o " .. devnull .. " ./..."
 
 -- Runs `cmd` in a split rooted at the current file's directory. `./...` and `.`
 -- resolve against nvim's cwd otherwise, which is not always the package dir.
