@@ -15,6 +15,14 @@ return {
 		lazy = false,
 		build = ":TSUpdate",
 		config = function()
+			-- tree-sitter-cli's `build` shells out via Rust's `cc` crate, which
+			-- defaults to cl.exe (MSVC) on Windows -- not installed here. zig
+			-- doubles as a C compiler (`zig cc`); the cc crate honors CC as a
+			-- command line, so this redirects it there instead.
+			if vim.fn.has("win32") == 1 and vim.fn.executable("zig") == 1 then
+				vim.env.CC = "zig cc"
+			end
+
 			require("nvim-treesitter").setup({
 				install_dir = vim.fn.stdpath("data") .. "/site",
 			})
