@@ -18,7 +18,10 @@ return {
 			require("nvim-treesitter").setup({
 				install_dir = vim.fn.stdpath("data") .. "/site",
 			})
-			require("nvim-treesitter").install(filetypes)
+			-- install() is async; without :wait() the FileType autocmd below
+			-- can fire vim.treesitter.start() before a parser finishes
+			-- downloading/compiling on first run, and start() hard-errors.
+			require("nvim-treesitter").install(filetypes):wait(300000)
 		end,
 		init = function()
 			vim.api.nvim_create_autocmd("FileType", {
