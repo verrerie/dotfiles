@@ -1,19 +1,32 @@
+local filetypes = {
+	"go", "gomod", "gowork", "gosum",
+	"typescript", "tsx", "javascript",
+	"scala",
+	"lua", "vim", "vimdoc",
+	"markdown", "markdown_inline",
+}
+
 return {
 	{
 		"nvim-treesitter/nvim-treesitter",
-		branch = "master", -- legacy stable API; "main" is a newer, incompatible rewrite
+		branch = "main", -- "master" is archived/frozen and drifted out of sync
+		-- with current Neovim core (broke K's hover float via a stale
+		-- conceal query predicate); "main" is the actively maintained rewrite.
+		lazy = false,
 		build = ":TSUpdate",
 		config = function()
-			require("nvim-treesitter.configs").setup({
-				ensure_installed = {
-					"go", "gomod", "gowork", "gosum",
-					"typescript", "tsx", "javascript",
-					"scala",
-					"lua", "vim", "vimdoc",
-					"markdown", "markdown_inline",
-				},
-				highlight = { enable = true },
-				indent = { enable = true },
+			require("nvim-treesitter").setup({
+				install_dir = vim.fn.stdpath("data") .. "/site",
+			})
+			require("nvim-treesitter").install(filetypes)
+		end,
+		init = function()
+			vim.api.nvim_create_autocmd("FileType", {
+				pattern = filetypes,
+				callback = function()
+					vim.treesitter.start()
+					vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+				end,
 			})
 		end,
 	},
