@@ -88,3 +88,10 @@ if vim.fn.has("win32") == 1 then
 		end
 	end
 end
+
+-- Directory browsing: a clean tree with a preview to its right.
+vim.g.netrw_banner = 0
+vim.g.netrw_liststyle = 3
+vim.g.netrw_preview = 1
+vim.g.netrw_alto = 0
+vim.g.netrw_winsize = 30
