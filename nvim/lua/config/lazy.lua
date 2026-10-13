@@ -25,4 +25,7 @@ require("lazy").setup({
 	},
 	install = { colorscheme = { "catppuccin", "habamax" } },
 	checker = { enabled = false },
+	-- No plugin here needs luarocks, and lazy's hererocks bootstrap was left
+	-- half-installed -- an error in :checkhealth for a feature nothing uses.
+	rocks = { enabled = false },
 })

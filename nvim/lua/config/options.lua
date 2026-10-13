@@ -47,6 +47,14 @@ do
 	end
 end
 
+-- Remote-plugin providers for languages nothing here uses. Unset, each one
+-- reports a missing host package in :checkhealth; the hosts are only needed by
+-- plugins written in those languages, and every plugin in lua/plugins is Lua.
+vim.g.loaded_node_provider = 0
+vim.g.loaded_perl_provider = 0
+vim.g.loaded_python3_provider = 0
+vim.g.loaded_ruby_provider = 0
+
 -- diagnostics: show the source only when more than one server reports
 vim.diagnostic.config({
 	virtual_text = { prefix = "●", source = "if_many" },

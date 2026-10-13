@@ -40,6 +40,13 @@ return {
 				cmd = gopls_cmd,
 				-- drop "gotmpl" from nvim-lspconfig's defaults: nvim has no
 				-- built-in detector for it, which trips a checkhealth warning
+				--
+				-- gowork/gosum still warn "Unknown filetype", but keep them: nvim
+				-- does detect both (filetype.lua maps go.work/go.sum) and gopls
+				-- serves them. The check tests membership in the filetype
+				-- *completion* list, which only covers filetypes shipping a
+				-- syntax/ftplugin file -- so it is a false positive, and deleting
+				-- these to silence it would lose real coverage.
 				filetypes = { "go", "gomod", "gowork", "gosum" },
 				settings = {
 					gopls = {

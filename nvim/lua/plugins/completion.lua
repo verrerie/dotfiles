@@ -3,7 +3,14 @@ return {
 		"hrsh7th/nvim-cmp",
 		dependencies = {
 			"hrsh7th/cmp-nvim-lsp",
-			"L3MON4D3/LuaSnip",
+			{
+				"L3MON4D3/LuaSnip",
+				-- jsregexp powers snippet variable/placeholder transformations;
+				-- without it luasnip loads but silently skips them. Built from the
+				-- vendored copy in deps/ with cc, so it needs no luarocks. No make
+				-- on Windows, where the transformations are simply unavailable.
+				build = vim.fn.has("win32") == 0 and "make install_jsregexp" or nil,
+			},
 			"saadparwaiz1/cmp_luasnip",
 		},
 		config = function()
