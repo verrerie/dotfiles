@@ -22,6 +22,18 @@ opt.undofile = true
 -- Marksman supports MDX through this compound Markdown filetype.
 vim.filetype.add({ extension = { mdx = "markdown.mdx" } })
 
+-- Treesitter folds; a high foldlevel keeps every fold open when a file opens.
+opt.foldmethod = "expr"
+opt.foldexpr = "v:lua.vim.treesitter.foldexpr()"
+opt.foldlevel = 99
+
+vim.api.nvim_create_autocmd("TextYankPost", {
+	group = vim.api.nvim_create_augroup("YankHighlight", { clear = true }),
+	callback = function()
+		vim.hl.on_yank()
+	end,
+})
+
 -- default indentation; go files override this in ftplugin/go.lua
 opt.expandtab = true
 opt.shiftwidth = 4
