@@ -47,6 +47,15 @@ do
 	end
 end
 
+-- Mason installs npm-based servers (ts_ls, some dap adapters) with a plain
+-- `npm install` and offers no registry setting, so it inherits ~/.npmrc.
+-- When that file points the *default* registry at a private proxy behind a
+-- short-lived token, every expiry turns into "failed to install ts_ls" (E401).
+-- Pin nvim's npm to the public registry. Env beats both project and user
+-- .npmrc in npm's config precedence, and scoped registries in a repo's own
+-- .npmrc still win for their scopes.
+vim.env.npm_config_registry = "https://registry.npmjs.org/"
+
 -- Remote-plugin providers for languages nothing here uses. Unset, each one
 -- reports a missing host package in :checkhealth; the hosts are only needed by
 -- plugins written in those languages, and every plugin in lua/plugins is Lua.
