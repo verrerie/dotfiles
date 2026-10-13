@@ -44,3 +44,21 @@ vim.api.nvim_create_autocmd("FileType", {
 		})
 	end,
 })
+
+-- Keep the explorer width when temporary result windows open or close.
+-- Restore the prior window option when the explorer is replaced by a file.
+vim.api.nvim_create_autocmd({ "FileType", "BufWinEnter" }, {
+	group = "NetrwUX",
+	callback = function()
+		local previous = vim.w.explorer_previous_winfixwidth
+		if vim.bo.filetype == "netrw" then
+			if previous == nil then
+				vim.w.explorer_previous_winfixwidth = vim.wo.winfixwidth
+			end
+			vim.wo.winfixwidth = true
+		elseif previous ~= nil then
+			vim.wo.winfixwidth = previous
+			vim.w.explorer_previous_winfixwidth = nil
+		end
+	end,
+})
