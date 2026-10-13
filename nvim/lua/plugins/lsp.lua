@@ -70,7 +70,11 @@ return {
 				cmd_env = metals_env,
 			})
 
-			vim.lsp.enable({ "gopls", "ts_ls", "metals" })
+			vim.lsp.enable({ "gopls", "ts_ls" })
+			-- Scala support is optional on machines without Metals installed.
+			if vim.fn.executable("metals") == 1 then
+				vim.lsp.enable("metals")
+			end
 
 			vim.api.nvim_create_autocmd("LspAttach", {
 				callback = function(args)

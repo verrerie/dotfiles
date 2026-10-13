@@ -19,6 +19,9 @@ opt.wrap = false
 opt.swapfile = false
 opt.undofile = true
 
+-- Marksman supports MDX through this compound Markdown filetype.
+vim.filetype.add({ extension = { mdx = "markdown.mdx" } })
+
 -- default indentation; go files override this in ftplugin/go.lua
 opt.expandtab = true
 opt.shiftwidth = 4
@@ -43,6 +46,22 @@ do
 	for _, dir in ipairs(extra_path) do
 		if vim.fn.isdirectory(dir) == 1 then
 			vim.env.PATH = dir .. sep .. vim.env.PATH
+		end
+	end
+end
+
+-- Use an existing JDK when GUI sessions only find macOS's Java launcher.
+if vim.fn.has("macunix") == 1 and not vim.env.JAVA_HOME then
+	local candidates = {
+		vim.fn.expand("~/.sdkman/candidates/java/current"),
+		"/opt/homebrew/opt/openjdk@17/libexec/openjdk.jdk/Contents/Home",
+		"/usr/local/opt/openjdk@17/libexec/openjdk.jdk/Contents/Home",
+	}
+	for _, dir in ipairs(candidates) do
+		if vim.fn.executable(dir .. "/bin/java") == 1 then
+			vim.env.JAVA_HOME = dir
+			vim.env.PATH = dir .. "/bin:" .. vim.env.PATH
+			break
 		end
 	end
 end
