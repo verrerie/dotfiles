@@ -2,12 +2,32 @@ local map = vim.keymap.set
 
 map("n", "<leader>w", "<cmd>write<cr>", { desc = "Save file" })
 map("n", "<leader>q", "<cmd>quit<cr>", { desc = "Quit" })
-map("n", "<leader>e", function()
+local function current_dir()
+	return vim.bo.filetype == "netrw" and vim.b.netrw_curdir or vim.fn.expand("%:p:h")
+end
+
+local function open_tree(dir)
 	-- An explicit path resets a tree cached from a previously browsed directory.
-	local dir = vim.bo.filetype == "netrw" and vim.b.netrw_curdir or vim.fn.expand("%:p:h")
 	vim.cmd("Explore " .. vim.fn.fnameescape(dir))
 	vim.cmd("Ntree " .. vim.fn.fnameescape(dir))
+end
+
+map("n", "<leader>e", function()
+	open_tree(current_dir())
 end, { desc = "File explorer" })
+map("n", "<leader>E", function()
+	vim.ui.input({ prompt = "Folder: ", default = current_dir() .. "/", completion = "dir" }, function(input)
+		if not input or input == "" then
+			return
+		end
+		local dir = vim.fn.fnamemodify(vim.fn.expand(input), ":p")
+		if vim.fn.isdirectory(dir) == 0 then
+			vim.notify("Not a folder: " .. input, vim.log.levels.WARN)
+			return
+		end
+		open_tree(dir)
+	end)
+end, { desc = "File explorer at a folder" })
 
 -- window navigation
 map("n", "<C-h>", "<C-w>h")

@@ -47,6 +47,7 @@ and skip anything already linked to this repo.
 
 - Leader is `<Space>`
 - `<leader>ff` / `<leader>fg` / `<leader>fb` — find files / live grep / buffers (Telescope)
+- `<leader>e` / `<leader>E` — netrw tree at the current file's folder / at a folder you type (Tab completes)
 - `gd` / `gr` / `K` — go to definition / references / hover (LSP)
 - `<leader>rn` / `<leader>ca` — rename / code action (i.e. autofix a hint/warning/error, LSP)
 - `]d` / `[d` — jump to next / previous diagnostic (hint, warning, or error)
