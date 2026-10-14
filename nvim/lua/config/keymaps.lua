@@ -29,6 +29,27 @@ map("n", "<leader>E", function()
 	end)
 end, { desc = "File explorer at a folder" })
 
+-- In netrw, the path of the entry under the cursor; elsewhere, the current file.
+local function current_path()
+	if vim.bo.filetype ~= "netrw" then
+		return vim.fn.expand("%:p")
+	end
+	local word = vim.fn["netrw#Call"]("NetrwGetWord")
+	if vim.w.netrw_liststyle ~= 3 then
+		return vim.fn["netrw#Call"]("NetrwFile", word)
+	end
+	-- NetrwFile joins the name to the last folder expanded, which is wrong in a tree.
+	-- NetrwTreePath returns the folder of a file, but the full path of a folder.
+	local path = vim.fn["netrw#Call"]("NetrwTreePath", vim.w.netrw_treetop)
+	return vim.endswith(path, word) and path or path .. word
+end
+
+map("n", "<leader>yp", function()
+	local path = vim.fn.simplify(current_path()):gsub("(.)/$", "%1")
+	vim.fn.setreg("+", path)
+	vim.notify("Copied " .. path)
+end, { desc = "Copy path of file or netrw entry" })
+
 -- window navigation
 map("n", "<C-h>", "<C-w>h")
 map("n", "<C-j>", "<C-w>j")

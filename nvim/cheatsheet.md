@@ -91,6 +91,15 @@ Built in since Neovim 0.11:
 | `zc` / `zo` / `za` | Close / open / toggle the fold at the cursor |
 | `zM` / `zR` | Close / open all folds |
 
+## Files and netrw
+
+| Keys | Action |
+|---|---|
+| `<leader>e` / `<leader>E` | Open the file tree at the current folder / at a folder you type |
+| `h` / `l` (netrw) | Go to the parent folder / expand a folder or open a file |
+| `<leader>yp` | Copy the path of the netrw entry under the cursor, or of the current file |
+| `:let @+ = b:netrw_curdir` (netrw) | Copy the path of the folder that netrw shows |
+
 ## Windows
 
 | Keys | Action |
