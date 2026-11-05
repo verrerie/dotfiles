@@ -10,7 +10,7 @@ return {
 			require("mason").setup()
 			require("mason-lspconfig").setup({
 				-- metals is intentionally absent: it ships via coursier, not mason
-				ensure_installed = { "gopls", "ts_ls" },
+				ensure_installed = { "gopls", "ts_ls", "sqlls" },
 			})
 
 			vim.lsp.config("*", {
@@ -84,6 +84,7 @@ return {
 					vim.keymap.set("n", "K", vim.lsp.buf.hover, opts)
 					vim.keymap.set("n", "<leader>rn", vim.lsp.buf.rename, opts)
 					vim.keymap.set("n", "<leader>ca", vim.lsp.buf.code_action, opts)
+					vim.keymap.set("n", "<leader>f", vim.lsp.buf.format(), opts)
 				end,
 			})
 
