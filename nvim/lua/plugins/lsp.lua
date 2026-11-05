@@ -70,6 +70,14 @@ return {
 				cmd_env = metals_env,
 			})
 
+			-- sqlls parses standard SQL only and flags dialect syntax such as `:>`
+			-- casts as errors, so keep its completion and drop its diagnostics.
+			vim.lsp.config("sqlls", {
+				handlers = {
+					["textDocument/publishDiagnostics"] = function() end,
+				},
+			})
+
 			vim.lsp.enable({ "gopls", "ts_ls" })
 			-- Scala support is optional on machines without Metals installed.
 			if vim.fn.executable("metals") == 1 then
@@ -84,7 +92,7 @@ return {
 					vim.keymap.set("n", "K", vim.lsp.buf.hover, opts)
 					vim.keymap.set("n", "<leader>rn", vim.lsp.buf.rename, opts)
 					vim.keymap.set("n", "<leader>ca", vim.lsp.buf.code_action, opts)
-					vim.keymap.set("n", "<leader>f", vim.lsp.buf.format(), opts)
+					vim.keymap.set("n", "<leader>f", vim.lsp.buf.format, opts)
 				end,
 			})
 
